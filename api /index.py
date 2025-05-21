@@ -1,25 +1,34 @@
 from flask import Flask, request, jsonify
+import os
 
 app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return "Music WRLD Backend is Live!"
+    return "Music WRLD Backend Running!"
 
-@app.route("/mix-master", methods=["POST"])
+@app.route("/api/mix-master", methods=["POST"])
 def mix_master():
-    # Placeholder logic — replace with real mixing code
-    return jsonify({"message": "Mixing complete!"})
+    vocal = request.files.get("vocal")
+    instrumental = request.files.get("instrumental")
 
-@app.route("/generate-lyrics", methods=["POST"])
+    if not vocal or not instrumental:
+        return jsonify({"error": "Both vocal and instrumental files are required"}), 400
+
+    # Just return success message for now
+    return jsonify({"message": "Files received. Mixing will be added soon."}), 200
+
+@app.route("/api/generate-lyrics", methods=["GET"])
 def generate_lyrics():
-    # Placeholder logic — replace with AI generation later
-    return jsonify({"lyrics": "Generated lyrics go here"})
+    return jsonify({
+        "lyrics": "Yo, I came from the bottom, now I’m rising above. Life hit me hard, but I fight with love..."
+    })
 
-@app.route("/create-beat", methods=["POST"])
+@app.route("/api/create-beat", methods=["GET"])
 def create_beat():
-    # Placeholder logic — replace with AI beat generation later
-    return jsonify({"beat": "Generated beat URL or info here"})
+    return jsonify({
+        "message": "Beat generation coming soon."
+    })
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
